@@ -8,27 +8,61 @@ const routes = [
   {
     path: "/",
     name: "Home",
+    redirect: Home,
+  },
+  {
+    path: "/home",
+    name: "home",
     component: Home,
     meta: {
-      index: 1 // 添加 meta 属性，约定 1 为第一级
+      index: 1,
+    },
+  },
+  {
+    path: "/category",
+    name: "category",
+    component: () => import("../views/Category.vue"),
+    meta: {
+      index: 1,
+    },
+  },
+  {
+    path: "/user",
+    name: "user",
+    component: () => import("../views/User.vue"),
+    meta: {
+      index: 1,
+    },
+  },
+  {
+    path: "/cart",
+    name: "cart",
+    component: () => import("../views/Cart.vue"),
+    meta: {
+      index: 1,
+    },
+  },
+  {
+    path:'/login',
+    name:'login',
+    component:()=>import('../views/Login.vue'),
+    meta:{
+      index:1
     }
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+    path: "/detail",
+    name: "detail",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
-      meta: {
-        index: 2 // 添加 meta 属性，约定 1 为第一级
-      }
-  }
+      import(/* webpackChunkName: "detail" */ "../views/Detail.vue"),
+    meta: {
+      index: 2,
+    },
+  },
 ];
 
 const router = new VueRouter({
-  routes
+  routes,
 });
 
 export default router;
