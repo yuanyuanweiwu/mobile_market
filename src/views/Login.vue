@@ -20,6 +20,7 @@
           v-model="password"
           name="password"
           label="密码"
+          type="password"
           placeholder="密码"
           :rules="[{ required: true, message: '请输入密码' }]"
         />
