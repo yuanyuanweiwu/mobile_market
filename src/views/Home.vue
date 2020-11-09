@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <header class="home-header wrap">
+    <header class="home-header wrap" :class="{'active':headerScroll}">
       <router-link to="./Category" tag="i">
         <i class="iconfont icon-category" />
       </router-link>
@@ -15,38 +15,70 @@
         <van-icon name="user-o" />
       </router-link>
     </header>
-    <swiper :list='swiperList'/>
+    <swiper :list="swiperList" />
+    <!-- 中部导航栏 -->
+    <navMiddle />
+    <!-- 新品上线 -->
+    <goods-List :name='"新品上线"' :list='newGoodses'  :goTodetail='goTodetail'/>
+    <!-- 热门商品 -->
+    <goods-List :name='"热门商品"' :list='hots' :goTodetail='goTodetail'/>
+    <!-- 最新推荐 -->
+    <goods-List :name='"最新推荐"' :list='recommends' :goTodetail='goTodetail' :style="{paddingBottom:'100px'}"/>
   </div>
-</template>
+</template>  
 
 <script>
 import { getLocal } from "../common/js/utils";
-import {getHome} from '../service/home'
-import  swiper from '@/components/Swiper'
-import { Toast } from 'vant';
+import { getHome } from "../service/home";
+import swiper from "@/components/Swiper";
+import { Toast } from "vant";
+import navMiddle from "../components/navMiddle";
+import  GoodsList from '../components/GoodsList'
 export default {
-  name:'home',
+  name: "home",
   data() {
     return {
       isLogin: false,
-      swiperList:[]
+      swiperList: [],
+      newGoodses: [],
+      recommends:[],
+      hots:[],
+      headerScroll:false
     };
   },
-  components:{
-    swiper
+  components: {
+    swiper,
+    navMiddle,
+    GoodsList
   },
- async mounted() {
+  methods: {
+    goTodetail(item){
+      console.log(item)
+    },
+    pageScroll(){
+      let scrollTop=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop> 100? this.headerScroll=true:this.headerScroll=false
+    }
+  },
+  async mounted() {
+    window.addEventListener('scroll',this.pageScroll)
     const token = getLocal("token");
     if (token) {
       this.isLogin = true;
     }
     Toast.loading({
-      message:'loading',
-      forbidClick:true
-    })
-    const {data}=await  getHome()
-    this.swiperList=data.carousels
+      message: "loading",
+      forbidClick: true,
+    });
+    const { data } = await getHome();
+    this.swiperList = data.carousels; //轮播图
+    this.newGoodses = data.newGoodses; //新品上线
+    this.recommends = data.recommendGoodses; // 最新推荐
+     this.hots = data.hotGoodses // 热门商品
+    Toast.clear();
   },
+  beforeDestroy(){
+    window.removeEventListener('scroll')
+  }
 };
 </script>
 
