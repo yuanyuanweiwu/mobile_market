@@ -55,7 +55,7 @@ const routes = [
     name:'productList',
     component:()=>import('../views/ProductList.vue'),
     meta:{
-      index:1
+      index:2
     }
   },
   {

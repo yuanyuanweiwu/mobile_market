@@ -14,38 +14,48 @@
         <van-tab title="新品" name="new"></van-tab>
         <van-tab title="价格" name="price"></van-tab>
       </van-tabs>
-      <van-pull-refresh
-        v-model="refreshing"
-        @refresh="onRefresh"
-        class="product-list-refresh"
-      >
-        <van-list
-          v-model="loading"
-          :finished="finished"
-          finished-text="没有更多了"
-          @load="onLoad"
-        >
-          <div
-            class="product-item"
-            v-for="(item, index) in productList"
-            :key="index"
-            @click="productDetail(item)"
-          >
-            <img :src="`//47.99.134.126:28019/${item.goodsCoverImg}`" />
-            <div class="product-info">
-              <p class="name">{{ item.goodsName }}</p>
-              <p class="subtitle">{{ item.goodsIntro }}</p>
-              <span class="price">￥ {{ item.sellingPrice }}</span>
-            </div>
-          </div>
-        </van-list>
-      </van-pull-refresh>
     </div>
+    <van-pull-refresh
+      v-model="refreshing"
+      @refresh="onRefresh"
+      class="product-list-refresh"
+    >
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        @offset="300"
+      >
+        <div
+          class="product-item"
+          v-for="(item, index) in productList"
+          :key="index"
+          @click="productDetail(item)"
+        >
+          <img
+            v-if="item.goodsCoverImg.includes('http')"
+            :src="`${item.goodsCoverImg}`"
+            alt=""
+          />
+          <img
+            v-else
+            :src="`//47.99.134.126:28019/${item.goodsCoverImg}`"
+            alt=""
+          />
+          <div class="product-info">
+            <p class="name">{{ item.goodsName }}</p>
+            <p class="subtitle">{{ item.goodsIntro }}</p>
+            <span class="price">￥ {{ item.sellingPrice }}</span>
+          </div>
+        </div>
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
 <script>
-import { search } from '../service/good'
+import { search } from "../service/good";
 // import  {Tab,Tabs} from 'vant'
 export default {
   data() {
@@ -166,6 +176,8 @@ export default {
         font-size: 12px;
         color: #666;
         background: #f7f7f7;
+        width: 90%;
+        height: 100%;
       }
     }
     .icon-More {

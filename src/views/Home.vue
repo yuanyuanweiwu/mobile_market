@@ -6,12 +6,12 @@
       </router-link>
       <div class="header-search">
         <span class="app-name">新蜂商城</span>
-        <router-link tag="span" to="./productList">发现精彩</router-link>
+        <router-link tag="span" to="./productList?from=home">发现精彩</router-link>
       </div>
-      <router-link class="login" tag="span" to="'./Login.vue'" v-if="!isLogin"
+      <router-link class="login" tag="span" to="./Login" v-if="!isLogin"
         >登录</router-link
       >
-      <router-link class="login" to="./User.vue" v-else tag="span">
+      <router-link class="login" to="./User" v-else tag="span">
         <van-icon name="user-o" />
       </router-link>
     </header>
