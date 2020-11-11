@@ -1,12 +1,12 @@
 <template>
   <div class="home">
     <header class="home-header wrap" :class="{'active':headerScroll}">
-      <router-link to="./Category" tag="i">
+      <router-link to="./category" tag="i">
         <i class="iconfont icon-category" />
       </router-link>
       <div class="header-search">
         <span class="app-name">新蜂商城</span>
-        <router-link tag="span" to="./product-list">发现精彩</router-link>
+        <router-link tag="span" to="./productList">发现精彩</router-link>
       </div>
       <router-link class="login" tag="span" to="'./Login.vue'" v-if="!isLogin"
         >登录</router-link

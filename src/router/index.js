@@ -51,6 +51,14 @@ const routes = [
     }
   },
   {
+    path:'/productList',
+    name:'productList',
+    component:()=>import('../views/ProductList.vue'),
+    meta:{
+      index:1
+    }
+  },
+  {
     path: "/detail",
     name: "detail",
     component: () =>

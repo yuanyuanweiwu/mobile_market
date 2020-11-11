@@ -2,11 +2,11 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import md5 from 'js-md5';
-import {Button,Form,Field,Toast,Icon,Swipe,SwipeItem} from 'vant'
+import {Button,Form,Field,Toast,Icon,Swipe,SwipeItem,Tabs,Tab,PullRefresh,List} from 'vant'
 import store from "./store";
 import 'lib-flexible/flexible'
 
-Vue.use(Form).use(Field).use(Toast).use(Button).use(Icon).use(Swipe).use(SwipeItem)
+Vue.use(Form).use(Field).use(Toast).use(Button).use(Icon).use(Swipe).use(SwipeItem).use(Tab).use(Tabs).use(PullRefresh).use(List)
 Vue.config.productionTip = false;
 window.vRouter = router
 new Vue({
