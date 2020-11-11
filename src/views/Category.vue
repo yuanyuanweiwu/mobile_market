@@ -1,7 +1,7 @@
 <template>
   <div class="category-box">
     <header class="category-header wrap">
-      <i class="iconfont icon-arrow-left-bold"></i>
+      <i class="iconfont icon-arrow-left-bold" @click="goBack"></i>
       <div class="header-search">
         <i class="iconfont icon-search"></i>
         <router-link
@@ -98,6 +98,9 @@ export default {
       let $screenHeight = document.documentElement.clientHeight;
       this.$refs.searchWrap.style.height = $screenHeight - 100 + "px";
     },
+    goBack(){
+      this.$router.go(-1)
+    }
   },
 };
 </script>

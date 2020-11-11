@@ -23,7 +23,7 @@ const routes = [
     name: "category",
     component: () => import("../views/Category.vue"),
     meta: {
-      index: 1,
+      index: 2,
     },
   },
   {
