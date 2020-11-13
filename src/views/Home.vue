@@ -53,7 +53,8 @@ export default {
   },
   methods: {
     goTodetail(item){
-      console.log(item)
+      let id=item.goodsId
+     this.$router.push({path:`/product/${id}`})
     },
     pageScroll(){
       let scrollTop=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop> 100? this.headerScroll=true:this.headerScroll=false
@@ -77,7 +78,7 @@ export default {
     Toast.clear();
   },
   beforeDestroy(){
-    window.removeEventListener('scroll')
+    // window.removeEventListener('scroll')
   }
 };
 </script>

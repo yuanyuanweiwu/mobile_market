@@ -7,3 +7,6 @@ export function getCategory() {
 export function search(params) {
   return axios.get('/search', { params });
 }
+export function getDetail(id){
+  return axios.get(`/goods/detail/${id}`)
+}
