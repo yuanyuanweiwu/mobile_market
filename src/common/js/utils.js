@@ -1,6 +1,6 @@
 export const getLocal=name=>{
-    return localStorage.getItem(name)
+    return sessionStorage.getItem(name)
 }
 export const setLocal =(name,value)=>{
-    localStorage.setItem(name,value)
+    sessionStorage.setItem(name,value)
 }
