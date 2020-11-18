@@ -97,7 +97,7 @@ export default {
       this.result = data.map((item) => item.cartItemId);
       Toast.clear();
     },
-   //步进器数量
+    //步进器数量
     async numberChange(value, detail) {
       if (
         this.carList.filter((item) => item.cartItemId == detail.name)[0]
@@ -130,7 +130,8 @@ export default {
     //结算
     onSubmit() {
       const params = JSON.stringify(this.result);
-      this.$router.push({ path: `create-order?cartItemId=${params}` });
+      console.log(params);
+      this.$router.push({ path: `createOrder?cartItemIds=${params}` });
     },
     //全选
     allCheck() {

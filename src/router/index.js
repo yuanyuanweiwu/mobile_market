@@ -8,6 +8,7 @@ import login from '../views/Login.vue'
 import productList from '../views/ProductList.vue'
 import detail from '../views/Detail.vue'
 import productDetail from '../views/productDetail.vue'
+import createOrder from '../views/CreateOrder.vue'
 Vue.use(VueRouter);
 
 const originalPush = VueRouter.prototype.push
@@ -74,6 +75,14 @@ const routes = [
     path: "/detail",
     name: "detail",
     component: detail,
+    meta: {
+      index: 2,
+    },
+  },
+  {
+    path: "/createOrder",
+    name: "createOrder",
+    component: createOrder,
     meta: {
       index: 2,
     },
