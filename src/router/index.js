@@ -9,6 +9,7 @@ import productList from '../views/ProductList.vue'
 import detail from '../views/Detail.vue'
 import productDetail from '../views/productDetail.vue'
 import createOrder from '../views/CreateOrder.vue'
+import address from '../views/Address.vue'
 Vue.use(VueRouter);
 
 const originalPush = VueRouter.prototype.push
@@ -94,6 +95,14 @@ const routes = [
       index: 3,
     },
     component: productDetail
+  },
+  {
+    path: '/address',
+    name: 'address',
+    meta: {
+      index: 2
+    },
+    component: address,
   },
 ];
 

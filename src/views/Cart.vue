@@ -93,7 +93,6 @@ export default {
 
       const { data } = await getCart({ pageNumber: 1 });
       this.carList = data;
-      console.log(data);
       this.result = data.map((item) => item.cartItemId);
       Toast.clear();
     },
@@ -130,7 +129,7 @@ export default {
     //结算
     onSubmit() {
       const params = JSON.stringify(this.result);
-      console.log(params);
+      debugger
       this.$router.push({ path: `createOrder?cartItemIds=${params}` });
     },
     //全选
