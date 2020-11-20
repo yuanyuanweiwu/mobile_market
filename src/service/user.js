@@ -20,4 +20,7 @@ export function logout() {
 export function register(params) {
   return axios.post('/user/register', params);
 }
-
+//修改
+export function EditUserInfo(params) {
+  return axios.put('/user/info', params);
+}

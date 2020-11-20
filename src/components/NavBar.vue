@@ -73,6 +73,11 @@ export default {
       span {
         font-size: 12px;
       }
+      .van-icon{
+        .van-info{
+          right: 30px;
+        }
+      }
     }
   }
 }

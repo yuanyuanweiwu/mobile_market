@@ -10,6 +10,9 @@ import detail from '../views/Detail.vue'
 import productDetail from '../views/productDetail.vue'
 import createOrder from '../views/CreateOrder.vue'
 import address from '../views/Address.vue'
+import addressEdit from '../views/AddressEdit.vue'
+import order from '../views/order.vue'
+import setting from '../views/Setting.vue'
 Vue.use(VueRouter);
 
 const originalPush = VueRouter.prototype.push
@@ -103,6 +106,30 @@ const routes = [
       index: 2
     },
     component: address,
+  },
+  {
+    path: '/addressEdit',
+    name: 'addressEdit',
+    meta: {
+      index: 2
+    },
+    component: addressEdit,
+  },
+  {
+    path: '/order',
+    name: 'order',
+    meta: {
+      index: 2
+    },
+    component: order,
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    meta: {
+      index: 2
+    },
+    component: setting,
   },
 ];
 

@@ -11,15 +11,15 @@
         </div>
       </div>
       <ul class="user-list">
-        <li>
+        <li @click="goTo('order')">
           <span>我的订单</span>
           <van-icon name="arrow" />
         </li>
-        <li>
+        <li @click="goTo('setting')">
           <span>账号管理</span>
           <van-icon name="arrow" />
         </li>
-        <li>
+        <li @click="goTo('address?where=mine')">
           <span>地址管理</span>
           <van-icon name="arrow" />
         </li>
@@ -49,6 +49,11 @@ export default {
     const { data } = await getUserInfo();
     this.user = data;
   },
+  methods:{
+    goTo(url){
+    this.$router.push({path:url})
+  }
+  }
 };
 </script>
 

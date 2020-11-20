@@ -3,7 +3,7 @@
     <s-header :title="'生成订单'"></s-header>
     <div class="address-wrap">
       <div class="name" @click="goTo">
-        <span>{{ address.userName }}</span>
+        <span>{{ address.userName }} </span>
         <span>{{ address.userPhone }}</span>
       </div>
       <div class="address">
@@ -13,17 +13,15 @@
       <van-icon class="arrow" name="arrow" />
     </div>
     <div class="good">
-      <div class="good-item" v-for="(item, index) in carList" :key="index">
-        <div class="good-img">
-          <img :src="item.goodsCoverImg" alt="" />
-        </div>
+      <div class="good-item" v-for="(item, index) in cartList" :key="index">
+        <div class="good-img"><img :src="item.goodsCoverImg" alt="" /></div>
         <div class="good-desc">
           <div class="good-title">
             <span>{{ item.goodsName }}</span>
             <span>x{{ item.goodsCount }}</span>
           </div>
-          <div class="good-price">
-            <div class="price">¥2000</div>
+          <div class="good-btn">
+            <div class="price">¥{{ item.sellingPrice }}</div>
           </div>
         </div>
       </div>
@@ -33,69 +31,107 @@
         <span>商品金额</span>
         <span>¥{{ total }}</span>
       </div>
-      <van-button class="pay-btn" color="#1baeae" type="primary" block
-        >生成订单
-      </van-button>
+      <van-button
+        class="pay-btn"
+        color="#1baeae"
+        type="primary"
+        block
+        @click="createOrder"
+        >生成订单</van-button
+      >
     </div>
+    <van-popup
+      closeable
+      :close-on-click-overlay="false"
+      v-model="showPay"
+      position="bottom"
+      :style="{ height: '30%' }"
+      @close="close"
+    >
+    <div class="popup">
+      <van-button :style="{ marginBottom: '10px' }" color="#1989fa"  block @click="payOrder(1)">支付宝支付</van-button>
+      <van-button  color="#4fc08d" block @click="payOrder(2)">微信支付</van-button>
+    </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { Toast } from "vant";
-import SHeader from "../components/SimpleHeader";
-import { getLocal, setLocal } from "../common/js/utils";
+import sHeader from "@/components/SimpleHeader";
 import { getByCartItemIds } from "../service/cart";
-import { getAddressList, getDefaultAddress } from "../service/address";
+import { getDefaultAddress, getAddressDetail } from "../service/address";
+import { setLocal, getLocal } from "@/common/js/utils";
+import { createOrder,payOrder } from "../service/order";
+import { Toast } from "vant";
 export default {
   components: {
-    SHeader,
+    sHeader,
   },
   data() {
     return {
-      carList: [],
+      cartList: [],
       address: {},
+      orderNo: "",
+      showPay: false,
     };
   },
   mounted() {
     this.init();
   },
-  computed: {
-    total: function() {
-      let sum = 0;
-      this.carList.forEach((item) => {
-        sum += item.goodsCount * item.sellingPrice;
-      });
-      return sum;
-    },
-  },
   methods: {
     async init() {
       Toast.loading({ message: "加载中...", forbidClick: true });
-      const { cartItemIds, addressId } = this.$route.query;
-
+      const { addressId, cartItemIds } = this.$route.query;
       const _cartItemIds = cartItemIds
         ? JSON.parse(cartItemIds)
-        : JSON.parse(getLocal("cartTiemIds"));
+        : JSON.parse(getLocal("cartItemIds"));
       setLocal("cartItemIds", JSON.stringify(_cartItemIds));
       const { data: list } = await getByCartItemIds({
         cartItemIds: _cartItemIds.join(","),
       });
-      const { data: address } = addressId
-        ? await getAddressList(addressId)
-        : await getDefaultAddress(addressId);
 
-      if (address) {
+      const { data: address } = addressId
+        ? await getAddressDetail(addressId)
+        : await getDefaultAddress();
+
+      if (!address) {
         this.$router.push({ path: "address" });
         return;
       }
+      this.cartList = list;
       this.address = address;
-      this.carList = list;
       Toast.clear();
     },
     goTo() {
-      this.$router.push({
-        path: `address?cartItemIds=${JSON.stringify(this.cartItemIds)}`,
+      const cartItemIds = getLocal("cartItemIds");
+      this.$router.push({ path: `address?cartItemIds=${cartItemIds}` });
+    },
+    async createOrder() {
+      const params = {
+        addressId: this.address.addressId,
+        cartItemIds: this.cartList.map((item) => item.cartItemId),
+      };
+      const { data, resultCode } = await createOrder(params);
+      setLocal("cartItemIds", "");
+      this.orderNo = data;
+      this.showPay = true;
+    },
+    close() {
+      this.$router.push({ path: "order" });
+    },
+    async payOrder(type) {
+      Toast.loading;
+      await payOrder({ orderNo: this.orderNo, payType: type });
+      this.$router.push({ path: "order" });
+    },
+  },
+  computed: {
+    total: function() {
+      let sum = 0;
+      this.cartList.forEach((item) => {
+        sum += item.goodsCount * item.sellingPrice;
       });
+      return sum;
     },
   },
 };
@@ -109,9 +145,9 @@ export default {
     margin-bottom: 20px;
     background: #fff;
     position: relative;
-    margin-top: 40px;
+    margin-top: 44px;
     font-size: 14px;
-    padding: 14px;
+    padding: 15px;
     color: #222333;
     .name,
     .address {
@@ -130,6 +166,17 @@ export default {
       bottom: 0;
       left: 0;
       height: 2px;
+      background: -webkit-repeating-linear-gradient(
+        135deg,
+        #ff6c6c 0,
+        #ff6c6c 20%,
+        transparent 0,
+        transparent 25%,
+        #1989fa 0,
+        #1989fa 45%,
+        transparent 0,
+        transparent 50%
+      );
       background: repeating-linear-gradient(
         -45deg,
         #ff6c6c 0,
@@ -147,33 +194,37 @@ export default {
   }
   .good {
     margin-bottom: 120px;
-    .good-item {
-      padding: 10px;
-      display: flex;
-      background: #fff;
-      .good-img {
-        img {
-          .wh(100px, 100px);
-        }
+  }
+  .good-item {
+    padding: 10px;
+    background: #fff;
+    display: flex;
+    .good-img {
+      img {
+        .wh(100px, 100px);
       }
-      .good-desc {
+    }
+    .good-desc {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex: 1;
+      padding: 20px;
+      .good-title {
         display: flex;
-        flex-direction: column;
         justify-content: space-between;
-        flex: 1;
-        padding: 20px;
-        .good-title {
-          display: flex;
-          justify-content: space-between;
+      }
+      .good-btn {
+        display: flex;
+        justify-content: space-between;
+        .price {
+          font-size: 16px;
+          color: red;
+          line-height: 28px;
         }
-        .good-price {
-          display: flex;
-          justify-content: space-between;
-          .price {
-            font-size: 16px;
-            color: red;
-            line-height: 28px;
-          }
+        .van-icon-delete {
+          font-size: 20px;
+          margin-top: 4px;
         }
       }
     }
@@ -187,7 +238,7 @@ export default {
     padding: 10px 0;
     padding-bottom: 50px;
     border-top: 1px solid #e9e9e9;
-    .price {
+    > div {
       display: flex;
       justify-content: space-between;
       padding: 0 5%;
@@ -206,6 +257,11 @@ export default {
       width: 90%;
       margin: 0 auto;
     }
+  }
+  .popup{
+    width: 90%;
+    margin: 0 auto;
+    padding: 50px 0;
   }
 }
 </style>

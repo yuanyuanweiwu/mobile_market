@@ -129,7 +129,6 @@ export default {
     //结算
     onSubmit() {
       const params = JSON.stringify(this.result);
-      debugger
       this.$router.push({ path: `createOrder?cartItemIds=${params}` });
     },
     //全选

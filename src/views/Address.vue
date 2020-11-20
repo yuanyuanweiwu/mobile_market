@@ -1,6 +1,6 @@
 <template>
-  <div class="address-container">
-    <s-header :title="'地址管理'"></s-header>
+  <div class="address-box">
+    <s-header :title="'地址管理'" :back="'/user'"></s-header>
     <div class="address-item">
       <van-address-list
         v-if="from != 'mine'"
@@ -24,33 +24,34 @@
 </template>
 
 <script>
-import SHeader from "../components/SimpleHeader";
-import { getAddressList } from "../service/address";
+import { Toast } from 'vant';
+import sHeader from '@/components/SimpleHeader'
+import { getAddressList } from '../service/address'
 export default {
   components: {
-    SHeader,
+    sHeader
   },
   data() {
     return {
-      chosenAddressId: "1",
+      chosenAddressId: '1',
       list: [],
-      from: this.$route.query.from,
-    };
+      from: this.$route.query.from||'',
+    }
   },
   async mounted() {
-    const { data } = await getAddressList();
-    this.list = data.map((item) => {
+    const { data } = await getAddressList()
+    this.list = data.map(item => {
       return {
         id: item.addressId,
         name: item.userName,
         tel: item.userPhone,
         address: `${item.provinceName} ${item.cityName} ${item.regionName} ${item.detailAddress}`,
-        isDefault: !!item.defaultFlag,
-      };
-    });
+        isDefault: !!item.defaultFlag
+      }
+    })
   },
-  methods:{
-        onAdd() {
+  methods: {
+    onAdd() {
       this.$router.push({ path: `addressEdit?type=add&from=${this.from}` })
     },
     onEdit(item, index) {
@@ -60,12 +61,12 @@ export default {
       this.$router.push({ path: `createOrder?addressId=${item.id}&from=${this.from}` })
     }
   }
-};
+}
 </script>
 
-<style lang="less" scoped>
-@import '../common/style/mixin';
- .address-container {
+<style lang="less">
+  @import '../common/style/mixin';
+  .address-box {
     .van-radio__icon {
       display: none;
     }
